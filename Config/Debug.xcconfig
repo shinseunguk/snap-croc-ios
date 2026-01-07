@@ -1,0 +1,15 @@
+// Debug Configuration
+#include "Secrets.xcconfig"
+
+// Build Settings
+SWIFT_ACTIVE_COMPILATION_CONDITIONS = $(inherited) DEBUG
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) DEBUG=1
+
+// App Configuration
+APP_NAME = SnapCroc Dev
+BUNDLE_ID_SUFFIX = .dev
+PRODUCT_BUNDLE_IDENTIFIER = com.snapcroc$(BUNDLE_ID_SUFFIX)
+
+// API Configuration
+// API_BASE_URL은 Secrets.xcconfig에서 가져옴
+ENABLE_DEBUG_LOGGING = YES
