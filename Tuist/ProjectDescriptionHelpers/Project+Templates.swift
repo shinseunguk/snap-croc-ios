@@ -17,10 +17,7 @@ extension Project {
                     bundleId: "io.tuist.snap-croc-ios",
                     infoPlist: .extendingDefault(
                         with: [
-                            "UILaunchScreen": [
-                                "UIColorName": "",
-                                "UIImageName": "",
-                            ],
+                            "UILaunchStoryboardName": "LaunchScreen",
                         ]
                     ),
                     sources: ["Sources/**"],
