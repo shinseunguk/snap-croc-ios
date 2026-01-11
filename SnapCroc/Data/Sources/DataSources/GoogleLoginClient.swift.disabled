@@ -1,0 +1,45 @@
+import Foundation
+import GoogleSignIn
+import Domain
+
+public final class GoogleLoginClient: SocialLoginClient {
+    public let provider: SocialLoginProvider = .google
+
+    private let clientID: String
+
+    public init(clientID: String) {
+        self.clientID = clientID
+    }
+
+    @MainActor
+    public func login() async throws -> SocialLoginRequest {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            throw SocialLoginError.loginCancelled
+        }
+
+        let config = GIDConfiguration(clientID: clientID)
+        GIDSignIn.sharedInstance.configuration = config
+
+        do {
+            let result = try await GIDSignIn.sharedInstance.signIn(
+                withPresenting: rootViewController
+            )
+
+            guard let idToken = result.user.idToken?.tokenString else {
+                throw SocialLoginError.invalidToken
+            }
+
+            return SocialLoginRequest(
+                provider: .google,
+                idToken: idToken,
+                accessToken: result.user.accessToken.tokenString
+            )
+        } catch {
+            if (error as NSError).code == -5 {
+                throw SocialLoginError.loginCancelled
+            }
+            throw error
+        }
+    }
+}

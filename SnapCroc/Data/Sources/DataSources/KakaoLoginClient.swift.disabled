@@ -1,0 +1,78 @@
+import Foundation
+import KakaoSDKAuth
+import KakaoSDKUser
+import Domain
+
+public final class KakaoLoginClient: SocialLoginClient {
+    public let provider: SocialLoginProvider = .kakao
+
+    public init() {}
+
+    @MainActor
+    public func login() async throws -> SocialLoginRequest {
+        // 카카오톡 설치 여부 확인
+        if UserApi.isKakaoTalkLoginAvailable() {
+            return try await loginWithKakaoTalk()
+        } else {
+            return try await loginWithKakaoAccount()
+        }
+    }
+
+    @MainActor
+    private func loginWithKakaoTalk() async throws -> SocialLoginRequest {
+        return try await withCheckedThrowingContinuation { continuation in
+            UserApi.shared.loginWithKakaoTalk { oauthToken, error in
+                if let error = error {
+                    // 에러 코드로 취소 여부 확인
+                    let nsError = error as NSError
+                    if nsError.code == -999 || nsError.domain == "canceled" {
+                        continuation.resume(throwing: SocialLoginError.loginCancelled)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                    return
+                }
+
+                guard let token = oauthToken?.accessToken else {
+                    continuation.resume(throwing: SocialLoginError.invalidToken)
+                    return
+                }
+
+                let request = SocialLoginRequest(
+                    provider: .kakao,
+                    idToken: token
+                )
+                continuation.resume(returning: request)
+            }
+        }
+    }
+
+    @MainActor
+    private func loginWithKakaoAccount() async throws -> SocialLoginRequest {
+        return try await withCheckedThrowingContinuation { continuation in
+            UserApi.shared.loginWithKakaoAccount { oauthToken, error in
+                if let error = error {
+                    // 에러 코드로 취소 여부 확인
+                    let nsError = error as NSError
+                    if nsError.code == -999 || nsError.domain == "canceled" {
+                        continuation.resume(throwing: SocialLoginError.loginCancelled)
+                    } else {
+                        continuation.resume(throwing: error)
+                    }
+                    return
+                }
+
+                guard let token = oauthToken?.accessToken else {
+                    continuation.resume(throwing: SocialLoginError.invalidToken)
+                    return
+                }
+
+                let request = SocialLoginRequest(
+                    provider: .kakao,
+                    idToken: token
+                )
+                continuation.resume(returning: request)
+            }
+        }
+    }
+}

@@ -5,7 +5,9 @@ let project = Project.framework(
     name: "Presentation",
     dependencies: [
         .Module.domain,
-        .Module.shared
+        .Module.data,
+        .Module.shared,
+        .External.tca
     ],
     resources: ["Resources/**"]
 )

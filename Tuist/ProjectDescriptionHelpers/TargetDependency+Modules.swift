@@ -27,4 +27,13 @@ extension TargetDependency {
             path: .relativeToRoot("SnapCroc/Shared")
         )
     }
+
+    public enum External {
+        public static let tca: TargetDependency = .external(name: "ComposableArchitecture")
+        public static let googleSignIn: TargetDependency = .external(name: "GoogleSignIn")
+        public static let googleSignInSwift: TargetDependency = .external(name: "GoogleSignInSwift")
+        // Kakao SDK는 Tuist 호환성 문제로 인해 임시 비활성화
+        // public static let kakaoSDKAuth: TargetDependency = .external(name: "KakaoSDKAuth")
+        // public static let kakaoSDKUser: TargetDependency = .external(name: "KakaoSDKUser")
+    }
 }

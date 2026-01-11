@@ -18,6 +18,24 @@ extension Project {
                     infoPlist: .extendingDefault(
                         with: [
                             "UILaunchStoryboardName": "LaunchScreen",
+                            "API_BASE_URL": "$(API_BASE_URL)",
+                            "CFBundleURLTypes": [
+                                [
+                                    "CFBundleTypeRole": "Editor",
+                                    "CFBundleURLSchemes": ["com.googleusercontent.apps.YOUR_REVERSED_CLIENT_ID"]
+                                ]
+                                // Kakao는 Tuist 호환성 문제로 임시 비활성화
+                                // [
+                                //     "CFBundleTypeRole": "Editor",
+                                //     "CFBundleURLSchemes": ["kakaoYOUR_KAKAO_APP_KEY"]
+                                // ]
+                            ]
+                            // "LSApplicationQueriesSchemes": [
+                            //     "kakaokompassauth",
+                            //     "kakaolink",
+                            //     "kakao"
+                            // ],
+                            // "KAKAO_APP_KEY": "YOUR_KAKAO_APP_KEY"
                         ]
                     ),
                     sources: ["Sources/**"],

@@ -5,6 +5,7 @@ let project = Project.framework(
     name: "Data",
     dependencies: [
         .Module.domain,
-        .Module.shared
+        .Module.shared,
+        .External.googleSignIn
     ]
 )
